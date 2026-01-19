@@ -2,6 +2,24 @@
  * GLOBAL REFERENCES
  ************************************/
 const capitalTableBody = document.getElementById("capitalTableBody");
+function forceScrollToBottom() {
+  const container = document.querySelector(".capital-scroll");
+  if (!container) return;
+
+  container.scrollTop = container.scrollHeight;
+}
+
+// Observe changes sa table body
+const tableBody = document.getElementById("capitalTableBody");
+
+const observer = new MutationObserver(() => {
+  forceScrollToBottom();
+});
+
+observer.observe(tableBody, {
+  childList: true,
+  subtree: true
+});
 
 /************************************
  * UTILITIES
@@ -81,12 +99,6 @@ function renderCapitalTable(dataList) {
     </tr>
   `);
 
-  // 🔹 Scroll long descriptions to bottom
-  capitalTableBody.querySelectorAll("td").forEach(td => {
-    if (td.style.overflowY) {
-      td.scrollTop = td.scrollHeight; // scroll to bottom
-    }
-  });
 }
 
 /************************************

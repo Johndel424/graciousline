@@ -26340,3 +26340,15 @@ dl li {
   flex-grow: 1;
 }
 /*# sourceMappingURL=maps/style.css.map */
+.capital-scroll {
+  height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+
+/* sticky header */
+.capital-scroll thead th {
+  position: sticky;
+  top: 0;
+  background: #f8f9fa;
+  z-index: 5;
+}
