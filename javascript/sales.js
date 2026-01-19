@@ -59,11 +59,86 @@ function populateMonthDropdown(months) {
     monthFilter.appendChild(option);
   });
 }
+// function showTableLoading() {
+//   tableBody.innerHTML = `
+//     <tr id="table-loading">
+//       <td colspan="12" style="height:320px; background:#f5f5f5;">
+//         <div style="
+//           display:flex;
+//           align-items:center;
+//           justify-content:center;
+//           height:100%;
+//         ">
+//           <div style="
+//             background:#ffffff;
+//             padding:30px 40px;
+//             border-radius:12px;
+//             box-shadow:0 10px 25px rgba(0,0,0,0.15);
+//           ">
+//             <img src="assets/logo.png"
+//                  alt="Loading..."
+//                  class="table-loading-spin"
+//                  style="width:90px;height:90px;">
+//           </div>
+//         </div>
+//       </td>
+//     </tr>
+//   `;
+// }
+function showTableLoading() {
+  const text = "Gracious Line";
+
+  // split text into spans
+  const letters = text.split("").map((char, i) => {
+    if (char === " ") return `<span style="display:inline-block;width:6px;"></span>`; // space
+    return `<span class="wavy-letter" style="animation-delay:${i * 0.1}s">${char}</span>`;
+  }).join("");
+
+  tableBody.innerHTML = `
+    <tr id="table-loading">
+      <td colspan="12" style="height:350px; background:#f5f5f5;">
+        <div style="
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          height:100%;
+        ">
+          <div style="
+            background:#ffffff;
+            padding:30px 40px;
+            border-radius:12px;
+            box-shadow:0 10px 25px rgba(0,0,0,0.15);
+            text-align:center;
+          ">
+            <img src="assets/logo.png"
+                 alt="Loading..."
+                 class="table-loading-spin"
+                 style="width:90px;height:90px;">
+
+            <div class="wavy-text" style="margin-top:20px; font-weight:bold; font-size:22px; color:#007bff;">
+              ${letters}
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+  `;
+}
+
+
+function hideTableLoading() {
+  const loadingRow = document.getElementById("table-loading");
+  if (loadingRow) loadingRow.remove();
+}
 
 /************************************
  * RENDER TABLE
  ************************************/
 function renderTable(dataList) {
+  // 👉 show loading first
+  showTableLoading();
+
+  setTimeout(() => {  
   tableBody.innerHTML = "";
 
   if (!dataList || dataList.length === 0) {
@@ -87,10 +162,15 @@ function renderTable(dataList) {
     const dateB = b.datePurchase ? new Date(b.datePurchase).getTime() : 0;
     return dateB - dateA;
   });
-
+  // 🔹 TOTAL ACCUMULATORS
+  let totalExpenses = 0;
+  let totalProfit = 0;
   dataList.forEach(item => {
     const profit = Number(item.profit) || 0;
+    const expenses = Number(item.expenses) || 0;
 
+    totalExpenses += expenses;
+    totalProfit += profit;
     // 🔹 PERCENTAGE LOGIC
     const businessPercent = profit >= 700 ? 0.5 : 0.3;
     const johndelPercent = profit >= 700 ? 0.2 : 0.3;
@@ -131,8 +211,36 @@ function renderTable(dataList) {
 
     tableBody.insertAdjacentHTML("beforeend", row);
   });
+  // 🔹 SUMMARY ROWS
+  const netTotal = totalProfit - totalExpenses;
 
+  const summaryRows = `
+    <!-- TOTAL EXPENSES -->
+    <tr class="fw-bold bg-light">
+      <td colspan="4" class="text-end">TOTAL EXPENSES</td>
+      <td class="narrow">${formatNumber(totalExpenses)}</td>
+      <td colspan="7"></td>
+    </tr>
+
+    <!-- TOTAL PROFIT -->
+    <tr class="fw-bold bg-light">
+      <td colspan="5" class="text-end">TOTAL PROFIT</td>
+      <td class="narrow">${formatNumber(totalProfit)}</td>
+      <td colspan="6"></td>
+    </tr>
+
+    <!-- NET TOTAL -->
+    <tr class="fw-bold ${netTotal < 0 ? "bg-danger text-white" : "bg-success text-white"}">
+      <td colspan="5" class="text-end">NET TOTAL</td>
+      <td class="narrow">${formatNumber(netTotal)}</td>
+      <td colspan="6"></td>
+    </tr>
+  `;
+
+
+  tableBody.insertAdjacentHTML("beforeend", summaryRows);
   attachContextMenu();
+  }, 3000);
 }
 function confirmSell() {
   const id = document.getElementById("sellSaleId").value;

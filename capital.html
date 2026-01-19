@@ -34,14 +34,6 @@
         <div class="navbar-menu-wrapper d-flex align-items-stretch">
 
           <button
-            class="btn btn-icon add-item-btn align-self-center"
-            type="button"
-            title="Add Item"
-            onclick="window.location.href='sales_add_item.html'">
-            <span class="mdi mdi-plus"></span>
-          </button>
-
-          <button
             class="navbar-toggler navbar-toggler-right d-lg-none align-self-center"
             type="button"
             data-toggle="offcanvas">
@@ -79,58 +71,68 @@
                 <i class="mdi mdi-home menu-icon"></i>
               </a>
             </li>
+            
             <li class="nav-item">
-              <a class="nav-link" href="sales.html">
+              <a class="nav-link" data-bs-toggle="collapse" href="#ui-sales" aria-expanded="false" aria-controls="ui-sales">
                 <span class="menu-title">Sales</span>
-                <i class="mdi mdi-file-document-box menu-icon"></i>
+                <i class="menu-arrow"></i>
+                <i class="mdi mdi-cash-register menu-icon"></i>
               </a>
+              <div class="collapse" id="ui-sales">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item">
+                    <a class="nav-link" href="sales.html">
+                      <span class="menu-title">Sales List</span>
+                      <i class="mdi mdi-receipt menu-icon"></i>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="sales_add_item.html">
+                      <span class="menu-title">Sales Item</span>
+                      <i class="mdi mdi-cart-plus menu-icon"></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </li>
-            <li class="nav-item">
+
+            <!-- <li class="nav-item">
               <a class="nav-link" href="capital.html">
                 <span class="menu-title">Capital</span>
                 <i class="mdi mdi-file-document-box menu-icon"></i>
               </a>
+            </li> -->
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="collapse" href="#ui-capital" aria-expanded="false" aria-controls="ui-capital">
+                <span class="menu-title">Capital</span>
+                <i class="menu-arrow"></i>
+                <i class="mdi mdi-wallet menu-icon"></i>
+              </a>
+              <div class="collapse" id="ui-capital">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item">
+                    <a class="nav-link" id="addExpenseBtn">
+                      <span class="menu-title">Add Expense</span>
+                      <i class="mdi mdi-cash-minus menu-icon"></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </li>
+
           </ul>
         </nav>
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper" style="margin:0 !important; padding: 10px !important;">
-            
-              
-
-            <!-- <div class="row" id="tableSection">
-              <div class="col-12 grid-margin">
-                <div class="card" style="margin:0 !important; padding:0 !important;">
-
-                  <div class="card-body">
-                    <div class="table-responsive">
-                      <table class="table">
-                        <thead>
-                          <tr>
-                            <th>Date</th>
-                            <th>Amount</th>
-                            <th>Description</th>
-                          </tr>
-                        </thead>
-                        <tbody id="capitalTableBody">
-                        </tbody>
-                      </table>
-                      
-
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> -->
             <div class="row" id="tableSection">
-  <div class="col-12 grid-margin">
-    <div class="card h-100">
+              <div class="col-12 grid-margin">
+                <div class="card h-100">
 
-      <div class="card-body p-0">
-        <div class="table-responsive capital-scroll">
-          <table class="table table-bordered mb-0">
-            <thead class="table-light">
+                  <div class="card-body p-0">
+                    <div class="table-responsive capital-scroll">
+                      <table class="table table-bordered mb-0">
+                        <thead class="table-light">
                           <tr>
                             <th>Date</th>
                             <th>Amount</th>
@@ -146,6 +148,37 @@
 
                 </div>
               </div>
+              <!-- Add Expense Modal -->
+<div class="modal fade" id="expenseModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Add Expense</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Amount</label>
+          <input type="number" class="form-control" id="expenseAmount">
+        </div>
+
+        <div class="form-group mt-2">
+          <label>Description</label>
+          <input type="text" class="form-control" id="expenseDescription">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger" id="saveExpenseBtn">Save</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
             </div>
 
           </div>

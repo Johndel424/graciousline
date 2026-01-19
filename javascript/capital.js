@@ -122,3 +122,51 @@ businessRef.on("value", snapshot => {
 }, err => {
   console.error("Failed to fetch capital data:", err);
 });
+
+
+// OPEN MODAL
+document.getElementById("addExpenseBtn").addEventListener("click", function () {
+  const modal = new bootstrap.Modal(document.getElementById("expenseModal"));
+  modal.show();
+});
+
+// SAVE EXPENSE
+document.getElementById("saveExpenseBtn").addEventListener("click", function () {
+  const amountInput = document.getElementById("expenseAmount").value;
+  const descriptionInput = document.getElementById("expenseDescription").value.trim();
+
+  const amount = Number(amountInput);
+
+  if (amount <= 0 || descriptionInput === "") {
+    alert("Please enter valid amount and description");
+    return;
+  }
+
+  const now = Date.now();
+  const newKey = firebase.database().ref("capital").push().key;
+
+  const capitalRecord = {
+    amount: -Math.abs(amount), // NEGATIVE
+    dateSold: now,
+    description: descriptionInput,
+    profit: 0,
+    updatedAt: now
+  };
+
+  firebase.database()
+    .ref("business/" + newKey)
+    .set(capitalRecord)
+    .then(() => {
+      alert("Expense saved");
+
+      // reset fields
+      document.getElementById("expenseAmount").value = "";
+      document.getElementById("expenseDescription").value = "";
+
+      // close modal
+      bootstrap.Modal.getInstance(
+        document.getElementById("expenseModal")
+      ).hide();
+    })
+    .catch(err => console.error(err));
+});

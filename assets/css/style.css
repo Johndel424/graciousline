@@ -26352,3 +26352,26 @@ dl li {
   background: #f8f9fa;
   z-index: 5;
 }
+/* Slow spin logo */
+.table-loading-spin {
+  animation: tableSpin 3s linear infinite;
+}
+
+@keyframes tableSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Per-letter wavy animation */
+.wavy-letter {
+  display: inline-block;
+  animation: waveLetter 1s ease-in-out infinite alternate;
+}
+
+@keyframes waveLetter {
+  0%   { transform: translateY(0); }
+  25%  { transform: translateY(-8px); }
+  50%  { transform: translateY(0); }
+  75%  { transform: translateY(8px); }
+  100% { transform: translateY(0); }
+}
