@@ -26480,8 +26480,9 @@ dl li {
   left:50%;
   width:120px;
   height:120px;
-  border:5px solid rgba(0,123,255,0.2); /* light ring */
-  border-top-color: #007bff; /* colored part */
+  border: 5px solid rgba(181, 101, 29, 0.2);
+ /* light ring */
+  border-top-color: #a2815a; /* colored part */
   border-radius:50%;
   transform:translate(-50%, -50%);
   animation: spinRing 1s linear infinite;
