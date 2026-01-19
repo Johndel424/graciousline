@@ -26375,3 +26375,59 @@ dl li {
   75%  { transform: translateY(8px); }
   100% { transform: translateY(0); }
 }
+/* Overlay full screen */
+#table-loader {
+  position: fixed;
+  top:0;
+  left:0;
+  width:100vw;
+  height:100vh;
+  background: rgba(0,0,0,0.1); /* semi-transparent bg */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+
+/* Elevated white card */
+.loader-card {
+  background:#fff;
+  padding:40px 50px;
+  border-radius:12px;
+  box-shadow:0 12px 30px rgba(0,0,0,0.15);
+  text-align:center;
+}
+
+/* Slow spin logo */
+.table-loading-spin {
+  width:90px;
+  height:90px;
+  animation: tableSpin 3s linear infinite;
+}
+
+@keyframes tableSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Wavy letters */
+.wavy-letter {
+  display:inline-block;
+  animation: waveLetter 1s ease-in-out infinite alternate;
+}
+
+@keyframes waveLetter {
+  0%   { transform: translateY(0); }
+  25%  { transform: translateY(-8px); }
+  50%  { transform: translateY(0); }
+  75%  { transform: translateY(8px); }
+  100% { transform: translateY(0); }
+}
+/* Circular logo + slow spin */
+.circular-logo {
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  object-fit:cover; /* maintain image ratio */
+  animation: tableSpin 3s linear infinite;
+}

@@ -60,9 +60,17 @@ function populateMonthDropdown(months) {
   });
 }
 // function showTableLoading() {
+//   const text = "Gracious Line";
+
+//   // split text into spans
+//   const letters = text.split("").map((char, i) => {
+//     if (char === " ") return `<span style="display:inline-block;width:6px;"></span>`; // space
+//     return `<span class="wavy-letter" style="animation-delay:${i * 0.1}s">${char}</span>`;
+//   }).join("");
+
 //   tableBody.innerHTML = `
 //     <tr id="table-loading">
-//       <td colspan="12" style="height:320px; background:#f5f5f5;">
+//       <td colspan="12" style="height:350px; background:#f5f5f5;">
 //         <div style="
 //           display:flex;
 //           align-items:center;
@@ -74,69 +82,41 @@ function populateMonthDropdown(months) {
 //             padding:30px 40px;
 //             border-radius:12px;
 //             box-shadow:0 10px 25px rgba(0,0,0,0.15);
+//             text-align:center;
 //           ">
 //             <img src="assets/logo.png"
 //                  alt="Loading..."
 //                  class="table-loading-spin"
 //                  style="width:90px;height:90px;">
+
+//             <div class="wavy-text" style="margin-top:20px; font-weight:bold; font-size:22px; color:#007bff;">
+//               ${letters}
+//             </div>
 //           </div>
 //         </div>
 //       </td>
 //     </tr>
 //   `;
 // }
-function showTableLoading() {
-  const text = "Gracious Line";
 
-  // split text into spans
-  const letters = text.split("").map((char, i) => {
-    if (char === " ") return `<span style="display:inline-block;width:6px;"></span>`; // space
-    return `<span class="wavy-letter" style="animation-delay:${i * 0.1}s">${char}</span>`;
-  }).join("");
 
-  tableBody.innerHTML = `
-    <tr id="table-loading">
-      <td colspan="12" style="height:350px; background:#f5f5f5;">
-        <div style="
-          display:flex;
-          align-items:center;
-          justify-content:center;
-          height:100%;
-        ">
-          <div style="
-            background:#ffffff;
-            padding:30px 40px;
-            border-radius:12px;
-            box-shadow:0 10px 25px rgba(0,0,0,0.15);
-            text-align:center;
-          ">
-            <img src="assets/logo.png"
-                 alt="Loading..."
-                 class="table-loading-spin"
-                 style="width:90px;height:90px;">
-
-            <div class="wavy-text" style="margin-top:20px; font-weight:bold; font-size:22px; color:#007bff;">
-              ${letters}
-            </div>
-          </div>
-        </div>
-      </td>
-    </tr>
-  `;
+// function hideTableLoading() {
+//   const loadingRow = document.getElementById("table-loading");
+//   if (loadingRow) loadingRow.remove();
+// }
+function showLoader() {
+  document.getElementById("table-loader").style.display = "flex";
 }
 
-
-function hideTableLoading() {
-  const loadingRow = document.getElementById("table-loading");
-  if (loadingRow) loadingRow.remove();
+function hideLoader() {
+  document.getElementById("table-loader").style.display = "none";
 }
-
 /************************************
  * RENDER TABLE
  ************************************/
 function renderTable(dataList) {
   // 👉 show loading first
-  showTableLoading();
+  showLoader();
 
   setTimeout(() => {  
   tableBody.innerHTML = "";
@@ -147,6 +127,7 @@ function renderTable(dataList) {
         <td colspan="10" class="text-center text-muted">No records found</td>
       </tr>
     `;
+    hideLoader();
     return;
   }
   dataList.sort((a, b) => {
@@ -240,6 +221,7 @@ function renderTable(dataList) {
 
   tableBody.insertAdjacentHTML("beforeend", summaryRows);
   attachContextMenu();
+  hideLoader();
   }, 3000);
 }
 function confirmSell() {
