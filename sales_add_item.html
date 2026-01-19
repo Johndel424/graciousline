@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Purple Admin</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="assets/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="assets/vendors/font-awesome/css/font-awesome.min.css">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="assets/vendors/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="javascript/firebase-init.js"></script>
+    <script src="javascript/sales_add_item.js" defer></script>
+  </head>
+  <body>
+    <div class="container-scroller">
+      
+      <!-- partial:partials/_navbar.html -->
+      <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
+          <a class="navbar-brand brand-logo" href="index.html"><img src="assets/images/logo.svg" alt="logo" /></a>
+          <a class="navbar-brand brand-logo-mini" href="index.html"><img src="assets/images/logo-mini.svg" alt="logo" /></a>
+        </div>
+        <div class="navbar-menu-wrapper d-flex align-items-stretch">
+          
+          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+            <span class="mdi mdi-menu"></span>
+          </button>
+        </div>
+      </nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_sidebar.html -->
+        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+          <ul class="nav">
+            
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">
+                <span class="menu-title">Statistcs</span>
+                <i class="mdi mdi-home menu-icon"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="sales.html">
+                <span class="menu-title">Sales</span>
+                <i class="mdi mdi-file-document-box menu-icon"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="documentation.html">
+                <span class="menu-title">Capital</span>
+                <i class="mdi mdi-file-document-box menu-icon"></i>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            
+            <div class="row justify-content-center">
+              <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Add Product</h4>
+                    <form class="forms-sample" id="salesForm">
+                      <div class="form-group">
+                        <label for="saleDate">Sale Date</label>
+                        <input type="date" class="form-control" id="saleDate">
+                      </div>
+                      <div class="form-group">
+                        <label>Product Name</label>
+                        <input type="text" class="form-control" id="productName" required>
+                      </div>
+                      <div class="form-group row">
+                        <div class="col-md-6">
+                          <label>Product Imei</label>
+                          <input type="number" class="form-control" id="productImei" required>
+                        </div>
+
+                        <div class="col-md-6">
+                          <label>Product Imei2</label>
+                          <input type="number" class="form-control" id="productImei2">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <div class="col-md-6">
+                          <label>Product Capital</label>
+                          <input type="number" class="form-control" id="productCapital" required>
+                        </div>
+
+                        <div class="col-md-6">
+                          <label>Business Capital</label>
+                          <input type="text" class="form-control" id="businessCapital" readonly>
+                          <small id="capitalWarning" class="text-danger d-none">
+                            Oops! Balance is not enough. You can’t use business capital.
+                          </small>
+                        </div>
+                      </div>
+
+
+                      <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-gradient-primary btn-sm">Save</button>
+                        <button type="button" class="btn btn-light btn-sm" onclick="window.history.back()">Cancel</button>
+                      </div>
+                    </form>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:partials/_footer.html -->
+          <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2023 <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights reserved.</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span>
+            </div>
+          </footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="assets/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="assets/vendors/chart.js/chart.umd.js"></script>
+    <script src="assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="assets/js/off-canvas.js"></script>
+    <script src="assets/js/misc.js"></script>
+    <script src="assets/js/settings.js"></script>
+    <script src="assets/js/todolist.js"></script>
+    <script src="assets/js/jquery.cookie.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="assets/js/dashboard.js"></script>
+    <!-- End custom js for this page -->
+  </body>
+</html>
