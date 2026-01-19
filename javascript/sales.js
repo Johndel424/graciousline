@@ -116,7 +116,7 @@ function hideLoader() {
  ************************************/
 function renderTable(dataList) {
   // 👉 show loading first
-  // showLoader();
+  showLoader();
 
   setTimeout(() => {  
   tableBody.innerHTML = "";
@@ -127,7 +127,7 @@ function renderTable(dataList) {
         <td colspan="10" class="text-center text-muted">No records found</td>
       </tr>
     `;
-    // hideLoader();
+    hideLoader();
     return;
   }
   dataList.sort((a, b) => {
@@ -221,7 +221,7 @@ function renderTable(dataList) {
 
   tableBody.insertAdjacentHTML("beforeend", summaryRows);
   attachContextMenu();
-  // hideLoader();
+  hideLoader();
   }, 3000);
 }
 function confirmSell() {
