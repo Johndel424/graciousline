@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Monthly Sales Graph</title>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h3 {
+      margin-bottom: 10px;
+    }
+    canvas {
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+<h3>📈 Monthly Sales (Daily)</h3>
+<canvas id="salesChart" height="120"></canvas>
+
+<script>
+/* ===============================
+   🔥 FIREBASE CONFIG
+================================ */
+var firebaseConfig = {
+  apiKey: "AIzaSyA0oSa7eucY_12j4xemIVEMk_kRGVS3CXo",
+  authDomain: "gracious-line.firebaseapp.com",
+  databaseURL: "https://gracious-line-default-rtdb.firebaseio.com",
+  projectId: "gracious-line",
+  storageBucket: "gracious-line.firebasestorage.app",
+  messagingSenderId: "417727395652",
+  appId: "1:417727395652:web:ab7766fa3233c6e4708911"
+};
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.database();
+
+/* ===============================
+   📊 LOAD & PROCESS DATA
+================================ */
+function loadMonthlySales() {
+  const salesPerDay = {}; // { day: total }
+
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+
+  db.ref("business").once("value").then(snapshot => {
+    snapshot.forEach(child => {
+      const data = child.val();
+
+      // ❌ Ignore expenses / capital
+      if (!data.amount || data.amount <= 0) return;
+
+      if (!data.dateSold) return;
+
+      const date = new Date(data.dateSold);
+
+      // ✔ Only current month
+      if (
+        date.getMonth() === currentMonth &&
+        date.getFullYear() === currentYear
+      ) {
+        const day = date.getDate(); // 1–31
+        salesPerDay[day] = (salesPerDay[day] || 0) + Number(data.amount);
+      }
+    });
+
+    renderChart(salesPerDay);
+  });
+}
+
+/* ===============================
+   📈 RENDER LINE GRAPH
+================================ */
+function renderChart(salesPerDay) {
+  const labels = [];
+  const values = [];
+
+  Object.keys(salesPerDay)
+    .sort((a, b) => a - b)
+    .forEach(day => {
+      labels.push(`Day ${day}`);
+      values.push(salesPerDay[day]);
+    });
+
+  const ctx = document.getElementById("salesChart");
+
+  new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Daily Sales",
+        data: values,
+        tension: 0.4,
+        borderWidth: 2,
+        pointRadius: 5
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: ctx => "₱" + ctx.raw.toLocaleString()
+          }
+        }
+      },
+      scales: {
+        y: {
+          ticks: {
+            callback: value => "₱" + value.toLocaleString()
+          }
+        }
+      }
+    }
+  });
+}
+
+/* ===============================
+   🚀 INIT
+================================ */
+loadMonthlySales();
+</script>
+
+</body>
+</html>

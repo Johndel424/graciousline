@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Monthly Profit Graph</title>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Firebase v8 -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    select {
+      padding: 6px;
+      margin-bottom: 15px;
+    }
+    canvas {
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+<h3>📈 Monthly Profit (Per Day)</h3>
+
+<select id="monthSelect"></select>
+
+<canvas id="profitChart" height="120"></canvas>
+
+<script>
+/* ===============================
+   🔥 FIREBASE CONFIG (PALITAN)
+================================ */
+firebase.initializeApp({
+  apiKey: "AIzaSyA0oSa7eucY_12j4xemIVEMk_kRGVS3CXo",
+  authDomain: "gracious-line.firebaseapp.com",
+  databaseURL: "https://gracious-line-default-rtdb.firebaseio.com",
+  projectId: "gracious-line",
+  storageBucket: "gracious-line.firebasestorage.app",
+  messagingSenderId: "417727395652",
+  appId: "1:417727395652:web:ab7766fa3233c6e4708911"
+});
+
+const db = firebase.database();
+let rawData = [];
+let chart = null;
+
+/* ===============================
+   📦 LOAD BUSINESS DATA
+   👉 PROFIT ANG BASE
+================================ */
+db.ref("business").once("value").then(snapshot => {
+  snapshot.forEach(child => {
+    const d = child.val();
+
+    // PROFIT ONLY
+    if (d.dateSold && Number(d.profit) > 0) {
+      rawData.push({
+        dateSold: d.dateSold,
+        profit: Number(d.profit)
+      });
+    }
+  });
+
+  buildMonthDropdown();
+});
+
+/* ===============================
+   🔽 MONTH DROPDOWN
+================================ */
+function buildMonthDropdown() {
+  const monthSet = new Set();
+
+  rawData.forEach(d => {
+    const dt = new Date(d.dateSold);
+    monthSet.add(`${dt.getFullYear()}-${dt.getMonth()}`);
+  });
+
+  const select = document.getElementById("monthSelect");
+  select.innerHTML = "";
+
+  [...monthSet].sort().forEach(key => {
+    const [y, m] = key.split("-");
+    const label = new Date(y, m)
+      .toLocaleString("en-US", { month: "long", year: "numeric" });
+
+    const opt = document.createElement("option");
+    opt.value = key;
+    opt.textContent = label;
+    select.appendChild(opt);
+  });
+
+  select.onchange = () => {
+    const [y, m] = select.value.split("-");
+    renderChart(+y, +m);
+  };
+
+  // default first month
+  if (select.value) {
+    const [y, m] = select.value.split("-");
+    renderChart(+y, +m);
+  }
+}
+
+/* ===============================
+   📊 RENDER PROFIT GRAPH
+================================ */
+function renderChart(year, month) {
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  // 🔹 DEFAULT 0 PROFIT
+  const dailyProfit = Array(daysInMonth).fill(0);
+
+  rawData.forEach(d => {
+    const dt = new Date(d.dateSold);
+    if (dt.getFullYear() === year && dt.getMonth() === month) {
+      dailyProfit[dt.getDate() - 1] += d.profit;
+    }
+  });
+
+  const labels = Array.from(
+    { length: daysInMonth },
+    (_, i) => `Day ${i + 1}`
+  );
+
+  if (chart) chart.destroy();
+
+  chart = new Chart(document.getElementById("profitChart"), {
+    type: "line",
+    data: {
+      labels,
+      datasets: [{
+        label: "Daily Profit",
+        data: dailyProfit,
+        tension: 0.4,
+        borderWidth: 2,
+        pointRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: ctx => "₱" + ctx.raw.toLocaleString()
+          }
+        }
+      },
+      scales: {
+        y: {
+          ticks: {
+            callback: v => "₱" + v.toLocaleString()
+          }
+        }
+      }
+    }
+  });
+}
+</script>
+
+</body>
+</html>

@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+     <!-- Firebase v8 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -14,13 +20,10 @@
     <!-- Plugin css for this page -->
     <link rel="stylesheet" href="assets/vendors/font-awesome/css/font-awesome.min.css" />
     <link rel="stylesheet" href="assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css">
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- Layout styles -->
     <link rel="stylesheet" href="assets/css/style.css">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="assets/images/favicon.png" />
+    <script src="javascript/overview.js" defer></script>
   </head>
   <body>
     <div class="container-scroller">
@@ -51,13 +54,30 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="sales.html">
+              <a class="nav-link" data-bs-toggle="collapse" href="#ui-sales" aria-expanded="false" aria-controls="ui-sales">
                 <span class="menu-title">Sales</span>
-                <i class="mdi mdi-file-document-box menu-icon"></i>
+                <i class="menu-arrow"></i>
+                <i class="mdi mdi-cash-register menu-icon"></i>
               </a>
+              <div class="collapse" id="ui-sales">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item">
+                    <a class="nav-link" href="sales.html">
+                      <span class="menu-title">Sales List</span>
+                      <i class="mdi mdi-receipt menu-icon"></i>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="sales_add_item.html">
+                      <span class="menu-title">Sales Item</span>
+                      <i class="mdi mdi-cart-plus menu-icon"></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="documentation.html">
+              <a class="nav-link" href="capital.html">
                 <span class="menu-title">Capital</span>
                 <i class="mdi mdi-file-document-box menu-icon"></i>
               </a>
@@ -81,7 +101,7 @@
                 </ul>
               </nav>
             </div>
-            <div class="row">
+            <!-- <div class="row">
               <div class="col-md-4 stretch-card grid-margin">
                 <div class="card bg-gradient-danger card-img-holder text-white">
                   <div class="card-body">
@@ -115,31 +135,67 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
             <div class="row">
-              <div class="col-md-7 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="clearfix">
-                      <h4 class="card-title float-start">Visit And Sales Statistics</h4>
-                      <div id="visit-sale-chart-legend" class="rounded-legend legend-horizontal legend-top-right float-end"></div>
-                    </div>
-                    <canvas id="visit-sale-chart" class="mt-4"></canvas>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-5 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    <h4 class="card-title">Traffic Sources</h4>
-                    <div class="doughnutjs-wrapper d-flex justify-content-center">
-                      <canvas id="traffic-chart"></canvas>
-                    </div>
-                    <div id="traffic-chart-legend" class="rounded-legend legend-vertical legend-bottom-left pt-4"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
+  <!-- 📊 GRAPH COLUMN -->
+  <div class="col-md-7 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Monthly Profit</h5>
+
+        <!-- MONTH DROPDOWN -->
+        <select id="monthSelect" class="form-control mb-3"></select>
+
+        <!-- GRAPH -->
+        <canvas id="profitChart" height="170"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- 📈 SUMMARY COLUMN -->
+  <div class="col-md-5 grid-margin stretch-card">
+  <!-- <div class="card" style="height: 380px;">
+  <div class="card-body d-flex flex-column">
+    <h5>Fast Selling Units</h5>
+    <select id="fastSellMode" class="form-control mb-2">
+      <option value="fast">Fast Moving (Speed)</option>
+      <option value="sold">Most Bought</option>
+      <option value="capital">Lowest Capital</option>
+    </select>
+    <div style="flex:1; position:relative;">
+      <canvas id="fastSellChart"></canvas>
+    </div>
+  </div>
+</div> -->
+<div class="card">
+  <div class="card-body d-flex flex-column">
+    <h5>Fast Selling Units</h5>
+    <select id="fastSellMode" class="form-control mb-2">
+      <option value="fast">Fast Moving (Speed)</option>
+      <option value="sold">Most Bought</option>
+      <option value="capital">Lowest Capital</option>
+    </select>
+    <div style="flex:1; position:relative;">
+      <canvas id="fastSellChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="card mt-3">
+  <div class="card-body">
+    <h5>Suggested Reorder (Top 5 Fast-Break Units)</h5>
+    <ul id="suggestionsList"></ul>
+  </div>
+</div>
+
+
+  </div>
+</div>
+
+</div>
+
+</div>
+
             
           </div>
           <!-- content-wrapper ends -->
